@@ -24,4 +24,14 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given empty string, should return 0");
     }
 
+    @Test
+    void add_string1_returns1() {
+        String inputString = "1";
+        int expectedSum = 1;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"1\", should return 1");
+    }
+
 }
