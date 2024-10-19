@@ -25,9 +25,10 @@ public class StringCalculator {
             String firstLine = firstLineAndRest[0];
             numbers = firstLineAndRest[1]; // Process numbers as usual, now having removed optional delimiter
 
-            String firstLineWithoutSlashes = firstLine.substring(2); // After removing first two slashes
+            String firstLineWithoutSlashes = firstLine.substring(
+                2); // After removing first two slashes
 
-            if(firstLineWithoutSlashes.contains("][")) { // Multiple types of delimiters, each enclosed in square brackets e.g. [*][%]
+            if (firstLineWithoutSlashes.contains("][")) { // Multiple types of delimiters, each enclosed in square brackets e.g. [*][%]
                 firstLineWithoutSlashes = firstLineWithoutSlashes.substring(1, firstLineWithoutSlashes.length() - 1); // remove brackets from either end
                 delimiters.addAll(Arrays.asList(firstLineWithoutSlashes.split("\\]\\[")));
             } else { // Only single kind of delimiter
@@ -45,7 +46,7 @@ public class StringCalculator {
         // When delimiter separated multiple numbers
         String splitPattern = "[\\n,]";
         if (delimiters.size() > 0) {
-            for(String delimiter: delimiters) {
+            for (String delimiter : delimiters) {
                 numbers = numbers.replace(delimiter, ",");
             }
         }

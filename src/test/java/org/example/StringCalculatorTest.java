@@ -174,4 +174,23 @@ class StringCalculatorTest {
                 + ", should return " + expected);
     }
 
+    static Stream<Arguments> provideMultipleDelimitersWithLengthLongerThanOneStrings() {
+        return Stream.of(
+            Arguments.of("//[***][%%]\n1***2%%3", 6),
+            Arguments.of("//[^^^^][#]\n0#0^^^^3", 3),
+            Arguments.of("//[^][##][&&&][%%%%]\n1%%%%2&&&3##4^5", 15)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideMultipleDelimitersWithLengthLongerThanOneStrings")
+    void add_stringMultipileDelimitersWithLengthLongerThanOne_returnsSum(String inputNumbersString,
+        int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given multiple delimiters with length longer then one String "
+                + inputNumbersString
+                + ", should return " + expected);
+    }
+
 }
