@@ -28,7 +28,8 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given empty string, should return 0");
     }
 
-    static Stream<Arguments> provideStringsForSum() {
+
+    static Stream<Arguments> provideSingleNumberStringsForSum() {
         return Stream.of(
             Arguments.of("1", 1),
             Arguments.of("2", 2),
@@ -38,32 +39,28 @@ class StringCalculatorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideStringsForSum")
+    @MethodSource("provideSingleNumberStringsForSum")
     void add_stringSingleNumber_returnsThatNumber(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
         assertEquals(expected, actualSum,
             "when given String " + inputNumbersString + ", should return " + expected);
     }
 
-    @Test
-    void add_string1comma5_returns6() {
-        String inputString = "1,5";
-        int expectedSum = 6;
 
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"1,5\", should return 6");
+    static Stream<Arguments> provideCommaSeparatedNumbersStringsForSum() {
+        return Stream.of(
+            Arguments.of("1,5", 6),
+            Arguments.of("1,5,1000", 1006)
+        );
     }
 
-    @Test
-    void add_string1comma5comma1000_returns1006() {
-        String inputString = "1,5,1000";
-        int expectedSum = 1006;
-
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"1,5,1000\", should return 1006");
+    @ParameterizedTest
+    @MethodSource("provideCommaSeparatedNumbersStringsForSum")
+    void add_stringCommaSeparatedNumbers_returnsSum(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum, "when given String " + inputNumbersString + ", should return " + expected);
     }
+
 
     @Test
     void add_string1newline2comma3_returns6() {
