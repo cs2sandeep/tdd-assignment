@@ -44,4 +44,14 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given string \"2\", should return 2");
     }
 
+    @Test
+    void add_string1comma5_returns6() {
+        String inputString = "1,5";
+        int expectedSum = 6;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"1, 5\", should return 6");
+    }
+
 }
