@@ -84,4 +84,15 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given string \"1\n2\n3\", should return 6");
     }
 
+    @Test
+    void add_stringSlashSlashDelimiterNewline1delimiter2_returns3() {
+        String inputString = "//;\n1;2";
+        int expectedSum = 3;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"//;\\n1;2\", should return 3");
+    }
+
+
 }
