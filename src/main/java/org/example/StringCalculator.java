@@ -43,14 +43,19 @@ public class StringCalculator {
 
         for (String individualNum : individualNums) {
             int iN = Integer.parseInt(individualNum);
-            if(iN < 0) {
+            if (iN > 1000) {    // Ignore number greater than 1000 in the sum
+                continue;
+            }
+
+            if (iN < 0) {
                 isNegativePresent = true;
-                negativeNumbers += negativeNumbers.length() > 0 ? "," + individualNum : individualNum;
-            } else if(!isNegativePresent) { // Once any negative number is found, no summation
+                negativeNumbers +=
+                    negativeNumbers.length() > 0 ? "," + individualNum : individualNum;
+            } else if (!isNegativePresent) { // Once any negative number is found, no summation
                 sum += iN;
             }
         }
-        if(isNegativePresent) {
+        if (isNegativePresent) {
             throw new IllegalArgumentException("negative numbers not allowed " + negativeNumbers);
         }
         return sum;
