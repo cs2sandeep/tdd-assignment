@@ -2,8 +2,12 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class StringCalculatorTest {
 
@@ -24,24 +28,21 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given empty string, should return 0");
     }
 
-    @Test
-    void add_string1_returns1() {
-        String inputString = "1";
-        int expectedSum = 1;
-
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"1\", should return 1");
+    static Stream<Arguments> provideStringsForSum() {
+        return Stream.of(
+            Arguments.of("1", 1),
+            Arguments.of("2", 2),
+            Arguments.of("0", 0),
+            Arguments.of("100", 100)
+        );
     }
 
-    @Test
-    void add_string2_returns2() {
-        String inputString = "2";
-        int expectedSum = 2;
-
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"2\", should return 2");
+    @ParameterizedTest
+    @MethodSource("provideStringsForSum")
+    void add_stringSingleNumber_returnsThatNumber(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given String " + inputNumbersString + ", should return " + expected);
     }
 
     @Test
