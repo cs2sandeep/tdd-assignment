@@ -51,7 +51,37 @@ class StringCalculatorTest {
 
         int actualSum = stringCalculator.add(inputString);
 
-        assertEquals(expectedSum, actualSum, "when given string \"1, 5\", should return 6");
+        assertEquals(expectedSum, actualSum, "when given string \"1,5\", should return 6");
+    }
+
+    @Test
+    void add_string1comma5comma1000_returns1006() {
+        String inputString = "1,5,1000";
+        int expectedSum = 1006;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"1,5,1000\", should return 1006");
+    }
+
+    @Test
+    void add_string1newline2comma3_returns6() {
+        String inputString = "1\n2,3";
+        int expectedSum = 6;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"1\n2,3\", should return 6");
+    }
+
+    @Test
+    void add_string1newline2newline3_returns6() {
+        String inputString = "1\n2\n3";
+        int expectedSum = 6;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"1\n2\n3\", should return 6");
     }
 
 }

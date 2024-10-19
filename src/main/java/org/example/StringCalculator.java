@@ -17,7 +17,7 @@ public class StringCalculator {
         int sum = 0;
 
         // When comma separated two numbers are given
-        String[] individualNums = numbers.split(",");
+        String[] individualNums = numbers.split("[\\n,]");
         for(String individualNum : individualNums) {
             sum += Integer.parseInt(individualNum);
         }
