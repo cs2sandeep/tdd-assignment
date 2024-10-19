@@ -31,6 +31,7 @@ public class StringCalculator {
         // When comma separated two numbers
         String splitPattern = "[\\n,]";
         if (delimiter.length() > 0) {
+            System.out.println("Delimiter: " + delimiter);
             splitPattern =
                 "[\\n" + delimiter + "]"; // If delimiter provided, it is now changed from ','
         }

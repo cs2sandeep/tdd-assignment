@@ -18,6 +18,7 @@ class StringCalculatorTest {
         stringCalculator = new StringCalculator();
     }
 
+
     @Test
     void add_emptyString_returns0() {
         String inputString = "";
@@ -43,7 +44,8 @@ class StringCalculatorTest {
     void add_stringSingleNumber_returnsThatNumber(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
         assertEquals(expected, actualSum,
-            "when given single number String " + inputNumbersString + ", should return " + expected);
+            "when given single number String " + inputNumbersString + ", should return "
+                + expected);
     }
 
 
@@ -58,7 +60,9 @@ class StringCalculatorTest {
     @MethodSource("provideCommaSeparatedNumbersStrings")
     void add_stringCommaSeparatedNumbers_returnsSum(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
-        assertEquals(expected, actualSum, "when given comma separated numbers String " + inputNumbersString + ", should return " + expected);
+        assertEquals(expected, actualSum,
+            "when given comma separated numbers String " + inputNumbersString + ", should return "
+                + expected);
     }
 
 
@@ -74,19 +78,30 @@ class StringCalculatorTest {
     @MethodSource("provideNewlinesTooBetweenNumbersStrings")
     void add_stringNewlinesTooBetweenNumbers_returnsSum(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
-        assertEquals(expected, actualSum, "when given newlines too between numbers String " + inputNumbersString + ", should return " + expected);
+        assertEquals(expected, actualSum,
+            "when given newlines too between numbers String " + inputNumbersString
+                + ", should return " + expected);
     }
 
 
-    @Test
-    void add_stringSlashSlashDelimiterNewline1delimiter2_returns3() {
-        String inputString = "//;\n1;2";
-        int expectedSum = 3;
+    static Stream<Arguments> provideCustomDelimitersBetweenNumbersStrings() {
+        return Stream.of(
+            Arguments.of("//;\n1;2", 3),
+            Arguments.of("//^\n1^2", 3),
+            Arguments.of("//%\n1%2%3", 6),
+            Arguments.of("//%\n1%2\n3", 6) // Assuming newlines between numbers continue to be handled even though default delimiter(comma) has been replaced with custom delimiter
 
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"//;\\n1;2\", should return 3");
+        );
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCustomDelimitersBetweenNumbersStrings")
+    void add_stringCustomDelimitersBetweenNumbers_returnsSum(String inputNumbersString,
+        int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given custom delimiters between numbers String " + inputNumbersString
+                + ", should return " + expected);
+    }
 
 }
