@@ -17,12 +17,16 @@ public class StringCalculator {
         // If optional delimiter provided
         // extract out the first line from the given argument
         String delimiter = "";
-        String firstLine = "";
         if (numbers.startsWith("//")) {
             String[] firstLineAndRest = numbers.split("\n", 2);
-            firstLine = firstLineAndRest[0];
-            delimiter = firstLine.substring(2); // After removing first two slashes
+            String firstLine = firstLineAndRest[0];
             numbers = firstLineAndRest[1]; // Process numbers as usual, now having removed optional delimiter
+
+            delimiter = firstLine.substring(2); // After removing first two slashes
+            if (delimiter.startsWith("[")) {
+                delimiter = delimiter.replace("[", "");
+                delimiter = delimiter.replace("]", "");
+            }
 
         }
 
@@ -31,9 +35,7 @@ public class StringCalculator {
         // When delimiter separated multiple numbers
         String splitPattern = "[\\n,]";
         if (delimiter.length() > 0) {
-            System.out.println("Delimiter: " + delimiter);
-            splitPattern =
-                "[\\n" + delimiter + "]"; // If delimiter provided, it is now changed from ','
+            numbers = numbers.replace(delimiter, ",");
         }
         String[] individualNums = numbers.split(splitPattern);
 

@@ -140,4 +140,21 @@ class StringCalculatorTest {
                 + expected);
     }
 
+    static Stream<Arguments> provideAnyLengthDelimiterStrings() {
+        return Stream.of(
+            Arguments.of("//[***]\n1***2***3", 6),
+            Arguments.of("//[%%]\n0%%1%%2", 3),
+            Arguments.of("//[(]\n1(2(4", 7)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnyLengthDelimiterStrings")
+    void add_stringAnyLengthDelimiter_returnsSum(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given any length delimiter String " + inputNumbersString
+                + ", should return " + expected);
+    }
+
 }
