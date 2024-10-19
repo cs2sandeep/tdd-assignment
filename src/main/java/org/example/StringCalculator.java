@@ -3,9 +3,12 @@ package org.example;
 public class StringCalculator {
 
     public int add(String numbers) {
-        if(numbers == "1") {
-            return 1;
+        // When a single number is present
+        boolean isOnlyDigits = numbers.matches(("\\d+"));
+        if (isOnlyDigits) {
+            return Integer.parseInt(numbers);
         }
+
         return 0;
     }
 

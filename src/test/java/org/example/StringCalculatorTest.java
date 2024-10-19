@@ -34,4 +34,14 @@ class StringCalculatorTest {
         assertEquals(expectedSum, actualSum, "when given string \"1\", should return 1");
     }
 
+    @Test
+    void add_string2_returns2() {
+        String inputString = "2";
+        int expectedSum = 2;
+
+        int actualSum = stringCalculator.add(inputString);
+
+        assertEquals(expectedSum, actualSum, "when given string \"2\", should return 2");
+    }
+
 }
