@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class StringCalculator {
 
     public int add(String numbers) {
@@ -16,16 +19,23 @@ public class StringCalculator {
 
         // If optional delimiter provided
         // extract out the first line from the given argument
-        String delimiter = "";
+        ArrayList<String> delimiters = new ArrayList<>();
         if (numbers.startsWith("//")) {
-            String[] firstLineAndRest = numbers.split("\n", 2);
+            String[] firstLineAndRest = numbers.split("\\n", 2);
             String firstLine = firstLineAndRest[0];
             numbers = firstLineAndRest[1]; // Process numbers as usual, now having removed optional delimiter
 
-            delimiter = firstLine.substring(2); // After removing first two slashes
-            if (delimiter.startsWith("[")) {
-                delimiter = delimiter.replace("[", "");
-                delimiter = delimiter.replace("]", "");
+            String firstLineWithoutSlashes = firstLine.substring(2); // After removing first two slashes
+
+            if(firstLineWithoutSlashes.contains("][")) { // Multiple types of delimiters, each enclosed in square brackets e.g. [*][%]
+                firstLineWithoutSlashes = firstLineWithoutSlashes.substring(1, firstLineWithoutSlashes.length() - 1); // remove brackets from either end
+                delimiters.addAll(Arrays.asList(firstLineWithoutSlashes.split("\\]\\[")));
+            } else { // Only single kind of delimiter
+                delimiters.add(firstLineWithoutSlashes); // either just the character like *
+                if (delimiters.get(0).startsWith("[")) { // or enclosed in [***] for multiple
+                    delimiters.set(0, delimiters.get(0).replace("[", ""));
+                    delimiters.set(0, delimiters.get(0).replace("]", ""));
+                }
             }
 
         }
@@ -34,8 +44,10 @@ public class StringCalculator {
 
         // When delimiter separated multiple numbers
         String splitPattern = "[\\n,]";
-        if (delimiter.length() > 0) {
-            numbers = numbers.replace(delimiter, ",");
+        if (delimiters.size() > 0) {
+            for(String delimiter: delimiters) {
+                numbers = numbers.replace(delimiter, ",");
+            }
         }
         String[] individualNums = numbers.split(splitPattern);
 

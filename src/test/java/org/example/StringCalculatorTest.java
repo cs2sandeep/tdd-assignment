@@ -157,4 +157,21 @@ class StringCalculatorTest {
                 + ", should return " + expected);
     }
 
+    static Stream<Arguments> provideMultipleDelimitersStrings() {
+        return Stream.of(
+            Arguments.of("//[*][%]\n1*2%3", 6),
+            Arguments.of("//[^][#]\n0#0^3", 3),
+            Arguments.of("//[^][#][&][%]\n1%2&3#4^5", 15)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideMultipleDelimitersStrings")
+    void add_stringMultipileDelimiters_returnsSum(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given multiple delimiters String " + inputNumbersString
+                + ", should return " + expected);
+    }
+
 }
