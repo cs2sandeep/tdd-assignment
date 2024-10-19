@@ -89,19 +89,38 @@ class StringCalculatorTest {
             Arguments.of("//;\n1;2", 3),
             Arguments.of("//^\n1^2", 3),
             Arguments.of("//%\n1%2%3", 6),
-            Arguments.of("//%\n1%2\n3", 6) // Assuming newlines between numbers continue to be handled even though default delimiter(comma) has been replaced with custom delimiter
+            Arguments.of("//%\n1%2\n3", 6)
+            // Assuming newlines between numbers continue to be handled even though default delimiter(comma) has been replaced with custom delimiter
 
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideCustomDelimitersBetweenNumbersStrings")
-    void add_stringCustomDelimitersBetweenNumbers_returnsSum(String inputNumbersString,
-        int expected) {
+    void add_stringCustomDelimitersBetweenNumbers_returnsSum(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
         assertEquals(expected, actualSum,
             "when given custom delimiters between numbers String " + inputNumbersString
                 + ", should return " + expected);
+    }
+
+
+    static Stream<Arguments> provideNegativeNumbersStrings() {
+        return Stream.of(
+            Arguments.of("1,2,-3", "negative numbers not allowed -3"),
+            Arguments.of("1,-2,-3", "negative numbers not allowed -2,-3"),
+            Arguments.of("-1,-2,-3", "negative numbers not allowed -1,-2,-3")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideNegativeNumbersStrings")
+    void add_stringNegativeNumbers_returnsSum(String inputNumbersString, String expectedMessage) {
+        Exception thrown = assertThrows(Exception.class, () -> {
+            stringCalculator.add(inputNumbersString);
+        });
+
+        assertEquals(expectedMessage, thrown.getMessage());
     }
 
 }

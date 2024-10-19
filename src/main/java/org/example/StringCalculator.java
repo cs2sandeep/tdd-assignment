@@ -28,7 +28,7 @@ public class StringCalculator {
 
         int sum = 0;
 
-        // When comma separated two numbers
+        // When delimiter separated multiple numbers
         String splitPattern = "[\\n,]";
         if (delimiter.length() > 0) {
             System.out.println("Delimiter: " + delimiter);
@@ -36,8 +36,22 @@ public class StringCalculator {
                 "[\\n" + delimiter + "]"; // If delimiter provided, it is now changed from ','
         }
         String[] individualNums = numbers.split(splitPattern);
+
+        // Flag for negative number
+        boolean isNegativePresent = false;
+        String negativeNumbers = "";
+
         for (String individualNum : individualNums) {
-            sum += Integer.parseInt(individualNum);
+            int iN = Integer.parseInt(individualNum);
+            if(iN < 0) {
+                isNegativePresent = true;
+                negativeNumbers += negativeNumbers.length() > 0 ? "," + individualNum : individualNum;
+            } else if(!isNegativePresent) { // Once any negative number is found, no summation
+                sum += iN;
+            }
+        }
+        if(isNegativePresent) {
+            throw new IllegalArgumentException("negative numbers not allowed " + negativeNumbers);
         }
         return sum;
     }
