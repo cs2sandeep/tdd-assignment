@@ -29,7 +29,7 @@ class StringCalculatorTest {
     }
 
 
-    static Stream<Arguments> provideSingleNumberStringsForSum() {
+    static Stream<Arguments> provideSingleNumberStrings() {
         return Stream.of(
             Arguments.of("1", 1),
             Arguments.of("2", 2),
@@ -39,15 +39,15 @@ class StringCalculatorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideSingleNumberStringsForSum")
+    @MethodSource("provideSingleNumberStrings")
     void add_stringSingleNumber_returnsThatNumber(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
         assertEquals(expected, actualSum,
-            "when given String " + inputNumbersString + ", should return " + expected);
+            "when given single number String " + inputNumbersString + ", should return " + expected);
     }
 
 
-    static Stream<Arguments> provideCommaSeparatedNumbersStringsForSum() {
+    static Stream<Arguments> provideCommaSeparatedNumbersStrings() {
         return Stream.of(
             Arguments.of("1,5", 6),
             Arguments.of("1,5,1000", 1006)
@@ -55,32 +55,28 @@ class StringCalculatorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideCommaSeparatedNumbersStringsForSum")
+    @MethodSource("provideCommaSeparatedNumbersStrings")
     void add_stringCommaSeparatedNumbers_returnsSum(String inputNumbersString, int expected) {
         int actualSum = stringCalculator.add(inputNumbersString);
-        assertEquals(expected, actualSum, "when given String " + inputNumbersString + ", should return " + expected);
+        assertEquals(expected, actualSum, "when given comma separated numbers String " + inputNumbersString + ", should return " + expected);
     }
 
 
-    @Test
-    void add_string1newline2comma3_returns6() {
-        String inputString = "1\n2,3";
-        int expectedSum = 6;
-
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"1\n2,3\", should return 6");
+    static Stream<Arguments> provideNewlinesTooBetweenNumbersStrings() {
+        return Stream.of(
+            Arguments.of("1\n2,3", 6),
+            Arguments.of("1,2\n3", 6),
+            Arguments.of("1,2,3", 6)
+        );
     }
 
-    @Test
-    void add_string1newline2newline3_returns6() {
-        String inputString = "1\n2\n3";
-        int expectedSum = 6;
-
-        int actualSum = stringCalculator.add(inputString);
-
-        assertEquals(expectedSum, actualSum, "when given string \"1\n2\n3\", should return 6");
+    @ParameterizedTest
+    @MethodSource("provideNewlinesTooBetweenNumbersStrings")
+    void add_stringNewlinesTooBetweenNumbers_returnsSum(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum, "when given newlines too between numbers String " + inputNumbersString + ", should return " + expected);
     }
+
 
     @Test
     void add_stringSlashSlashDelimiterNewline1delimiter2_returns3() {
