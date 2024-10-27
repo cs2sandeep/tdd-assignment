@@ -2,6 +2,8 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StringCalculator {
 
@@ -52,28 +54,30 @@ public class StringCalculator {
         }
         String[] individualNums = numbers.split(splitPattern);
 
-        // Flag for negative number
-        boolean isNegativePresent = false;
-        String negativeNumbers = "";
+        List<Integer> numsInIntegerFormat = Arrays.stream(individualNums).map(numInStringFormat -> Integer.parseInt(numInStringFormat)).toList();
+
+
+        // Negative number check
+        validateForNegativesReturnNegativesAsStringAndThrow(numsInIntegerFormat);
 
         for (String individualNum : individualNums) {
             int iN = Integer.parseInt(individualNum);
             if (iN > 1000) {    // Ignore number greater than 1000 in the sum
                 continue;
             }
+            sum += iN;
+        }
 
-            if (iN < 0) {
-                isNegativePresent = true;
-                negativeNumbers +=
-                    negativeNumbers.length() > 0 ? "," + individualNum : individualNum;
-            } else if (!isNegativePresent) { // Once any negative number is found, no summation
-                sum += iN;
-            }
-        }
-        if (isNegativePresent) {
-            throw new IllegalArgumentException("negative numbers not allowed " + negativeNumbers);
-        }
         return sum;
     }
+
+    private static void validateForNegativesReturnNegativesAsStringAndThrow(List<Integer> numsInIntegerFormat) {
+        List<Integer> negativeNumbers = numsInIntegerFormat.stream().filter(num -> num < 0).toList();
+        if (negativeNumbers.size() > 0) {
+            throw new IllegalArgumentException("negative numbers not allowed " + negativeNumbers.stream().map(String::valueOf).collect(
+                Collectors.joining(",")) );
+        }
+    }
+
 
 }
