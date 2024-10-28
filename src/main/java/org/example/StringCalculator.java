@@ -30,12 +30,15 @@ public class StringCalculator {
 
         // Flag for even-indices sum or odd-indices sum
         // Remove delimiters of 0 or 1, as they are not intended as flags not delimiters
-        String sumFlag = "";
+        int indexForSum = 0;
+        int incrementWhileSum = 1;
         if (delimiters.size() > 0 && delimiters.get(0).equals("0")) {
-            sumFlag = "0";
+            indexForSum = 0;
+            incrementWhileSum = 2;
             delimiters.remove(0);
         } else if (delimiters.size() > 0 && delimiters.get(0).equals("1")) {
-            sumFlag = "1";
+            indexForSum = 1;
+            incrementWhileSum = 2;
             delimiters.remove(0);
         }
 
@@ -54,23 +57,12 @@ public class StringCalculator {
         validateForNegativesReturnNegativesAsStringAndThrow(numsInIntegerFormat);
 
         // Sum
-        int index = 0;
-        int increment = 1;
-
-        if (sumFlag == "0") {
-            index = 0;
-            increment = 2;
-        } else if (sumFlag == "1") {
-            index = 1;
-            increment = 2;
-        }
-
         int sum = 0;
-        for (; index < numsInIntegerFormat.size(); index += increment) {
-            if (numsInIntegerFormat.get(index) > 1000) {
+        for (; indexForSum < numsInIntegerFormat.size(); indexForSum += incrementWhileSum) {
+            if (numsInIntegerFormat.get(indexForSum) > 1000) {
                 continue;
             }
-            sum += numsInIntegerFormat.get(index);
+            sum += numsInIntegerFormat.get(indexForSum);
         }
         return sum;
     }
