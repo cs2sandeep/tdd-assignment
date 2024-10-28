@@ -193,4 +193,23 @@ class StringCalculatorTest {
                 + ", should return " + expected);
     }
 
+    static Stream<Arguments> getSumOfSkippedPlaces() {
+        return Stream.of(
+            Arguments.of("//0\n1,2,3,4,5", 9),
+            Arguments.of("//1\n1,2,3,4,5", 6)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("getSumOfSkippedPlaces")
+    void add_getSumOfEvenPlaces_returnsSumOfSkippedPlaces(String inputNumbersString, int expected) {
+        int actualSum = stringCalculator.add(inputNumbersString);
+        assertEquals(expected, actualSum,
+            "when given 0 or 1 flag to sum skipped places "
+                + inputNumbersString
+                + ", should return " + expected);
+    }
+
+
+
 }

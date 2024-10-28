@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 public class StringCalculator {
 
     public int add(String numbers) {
+        String numbersOriginal = numbers;
+
         // When empty string given
         if (numbers.equals("")) {
             return 0;
@@ -21,26 +23,19 @@ public class StringCalculator {
 
         // If optional delimiter provided
         // extract out the first line from the given argument
-        ArrayList<String> delimiters = new ArrayList<>();
-        if (numbers.startsWith("//")) {
-            String[] firstLineAndRest = numbers.split("\\n", 2);
-            String firstLine = firstLineAndRest[0];
-            numbers = firstLineAndRest[1]; // Process numbers as usual, now having removed optional delimiter
+        List<String> delimiters = extractDelimiters(numbers);
+        if(numbers.startsWith("//")) {
+            numbers = numbers.split("\\n", 2)[1];
+        }
 
-            String firstLineWithoutSlashes = firstLine.substring(
-                2); // After removing first two slashes
-
-            if (firstLineWithoutSlashes.contains("][")) { // Multiple types of delimiters, each enclosed in square brackets e.g. [*][%]
-                firstLineWithoutSlashes = firstLineWithoutSlashes.substring(1, firstLineWithoutSlashes.length() - 1); // remove brackets from either end
-                delimiters.addAll(Arrays.asList(firstLineWithoutSlashes.split("\\]\\[")));
-            } else { // Only single kind of delimiter
-                delimiters.add(firstLineWithoutSlashes); // either just the character like *
-                if (delimiters.get(0).startsWith("[")) { // or enclosed in [***] for multiple
-                    delimiters.set(0, delimiters.get(0).replace("[", ""));
-                    delimiters.set(0, delimiters.get(0).replace("]", ""));
-                }
-            }
-
+        // flag for even-indices sum or odd-indices sum
+        String sumFlag = "";
+        if(delimiters.size() > 0 && delimiters.get(0).equals("0")) {
+            sumFlag = "0";
+            delimiters.remove(0);
+        } else if (delimiters.size() > 0 && delimiters.get(0).equals("1")) {
+            sumFlag = "1";
+            delimiters.remove(0);
         }
 
         int sum = 0;
@@ -60,12 +55,30 @@ public class StringCalculator {
         // Negative number check
         validateForNegativesReturnNegativesAsStringAndThrow(numsInIntegerFormat);
 
-        for (String individualNum : individualNums) {
-            int iN = Integer.parseInt(individualNum);
-            if (iN > 1000) {    // Ignore number greater than 1000 in the sum
+//        for (String individualNum : individualNums) {
+//            int iN = Integer.parseInt(individualNum);
+//            if (iN > 1000) {    // Ignore number greater than 1000 in the sum
+//                continue;
+//            }
+//            sum += iN;
+//        }
+
+        int index = 0;
+        int increment = 1;
+
+        if(sumFlag == "0") {
+            index = 0;
+            increment = 2;
+        } else if (sumFlag == "1") {
+            index = 1;
+            increment = 2;
+        }
+
+        for(; index < numsInIntegerFormat.size(); index += increment) {
+            if(numsInIntegerFormat.get(index) > 1000) {
                 continue;
             }
-            sum += iN;
+            sum += numsInIntegerFormat.get(index);
         }
 
         return sum;
@@ -77,6 +90,31 @@ public class StringCalculator {
             throw new IllegalArgumentException("negative numbers not allowed " + negativeNumbers.stream().map(String::valueOf).collect(
                 Collectors.joining(",")) );
         }
+    }
+
+    private List<String> extractDelimiters(String fullDelimiterString) {
+        List<String> extractedDelimiters = new ArrayList<>();
+
+        if (fullDelimiterString.startsWith("//")) {
+            String[] firstLineAndRest = fullDelimiterString.split("\\n", 2);
+            String firstLine = firstLineAndRest[0];
+
+            String firstLineWithoutSlashes = firstLine.substring(2); // After removing first two slashes
+
+            if (firstLineWithoutSlashes.contains("][")) { // Multiple types of delimiters, each enclosed in square brackets e.g. [*][%]
+                firstLineWithoutSlashes = firstLineWithoutSlashes.substring(1, firstLineWithoutSlashes.length() - 1); // remove brackets from either end
+                extractedDelimiters.addAll(Arrays.asList(firstLineWithoutSlashes.split("\\]\\[")));
+            } else { // Only single kind of delimiter
+                extractedDelimiters.add(firstLineWithoutSlashes); // either just the character like *
+                if (extractedDelimiters.get(0).startsWith("[")) { // or enclosed in [***] for multiple
+                    extractedDelimiters.set(0, extractedDelimiters.get(0).replace("[", ""));
+                    extractedDelimiters.set(0, extractedDelimiters.get(0).replace("]", ""));
+                }
+            }
+
+        }
+
+        return extractedDelimiters;
     }
 
 
